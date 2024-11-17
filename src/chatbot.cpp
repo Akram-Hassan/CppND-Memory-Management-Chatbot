@@ -21,7 +21,7 @@ ChatBot::ChatBot()
 ChatBot::ChatBot(std::string filename)
 {
     std::cout << "ChatBot Constructor" << std::endl;
-    
+
     // invalidate data handles
     _chatLogic = nullptr;
     _rootNode = nullptr;
@@ -145,4 +145,64 @@ int ChatBot::ComputeLevenshteinDistance(std::string s1, std::string s2)
     delete[] costs;
 
     return result;
+}
+
+ChatBot::ChatBot(const ChatBot &other) {
+    std::cout << "ChatBot copy constructor\n";
+
+    _image = new wxBitmap(*other._image);
+    _currentNode = other._currentNode;
+    _rootNode = other._rootNode;
+    _chatLogic = other._chatLogic;
+}
+
+ChatBot &ChatBot::operator=(const ChatBot &other) {
+    std::cout << "ChatBot copy assignment operator\n";
+
+    if(this == &other)
+        return *this;
+
+    delete _image;
+    _image = new wxBitmap(*other._image);
+
+    _currentNode = other._currentNode;
+    _rootNode = other._rootNode;
+    _chatLogic = other._chatLogic;
+
+    return *this;
+}
+
+ChatBot::ChatBot(ChatBot &&other) {
+    std::cout << "ChatBot move constructor\n";
+
+    _image = other._image;
+    other._image = nullptr;
+
+    _currentNode = other._currentNode;
+    _rootNode = other._rootNode;
+    _chatLogic = other._chatLogic;
+
+    other._currentNode = nullptr;
+    other._rootNode = nullptr;
+    other._chatLogic = nullptr;
+}
+
+ChatBot &ChatBot::operator=(ChatBot &&other) {
+    std::cout << "ChatBot move assignment operator\n";
+    if(this == &other)
+        return *this;
+
+    delete _image;
+    _image = other._image;
+    other._image = nullptr;
+
+    _rootNode = other._rootNode;
+    _currentNode = other._currentNode;
+    _chatLogic = other._chatLogic;
+
+    other._rootNode = nullptr;
+    other._currentNode = nullptr;
+    other._chatLogic = nullptr;
+
+    return *this;
 }
